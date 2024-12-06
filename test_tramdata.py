@@ -30,7 +30,6 @@ class TestTramData(unittest.TestCase):
             self.assertIn(stop, self.stopdict, msg = stop + ' not in stopdict')
 
     def test_lines(self):
-
         lines = [
             line.strip().rstrip(':')
             for line in self.lines_txtfile
@@ -47,25 +46,20 @@ class TestTramData(unittest.TestCase):
             parts = line.strip().rsplit(maxsplit=1)
             if len(parts) > 0:
                 lines.append(parts[0])
-        
-#        print("TXTFIL:", lines)              #test, ta bort
-#        print("LINEDICT", self.linedict)
-
 
         for line,stops in self.linedict.items():
             for stop in stops:
                 self.assertIn(stop, lines, msg= f'Stop {stop} is missing in linedict')
 
     # This test going through the stopdictionary
-    # Getting the lat and long and tests if there is more than 1km between two stops
-
+    # Getting the lat and long and tests if there is more than 20km between two stops
     def test_distance(self):
         stops = list(self.stopdict.items())
         for i in range(len(stops) - 1):  
             stop1, coord1 = stops[i]
             stop2, coord2 = stops[i + 1]
 
-        # Extrahera latitud och longitud för båda hållplatserna
+        # Extract latitude and longitude for both stops
             lat1, lon1 = float(coord1["lat"]), float(coord1["lon"])
             lat2, lon2 = float(coord2["lat"]), float(coord2["lon"])
 
@@ -119,6 +113,7 @@ class TestTramData(unittest.TestCase):
         query = 'between Chalmers and Landvetter'
         result = answer_query(self.full_tramdict, query)
         self.assertFalse(result, msg= f'Expected result is False, but the result is {result}')
+    
 
 
 if __name__ == '__main__':
